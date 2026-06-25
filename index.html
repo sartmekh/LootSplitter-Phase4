@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Matvii K.">
+    <title>Dungeon Loot Splitter</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main>
+        <header class="header">
+            <h1>Dungeon Loot Splitter.</h1>
+        </header>
+
+        <section class="panel">
+            <h2>Party Setup</h2>
+            <label for="sizeInput">Number of Party Members:</label>
+            <input type="number" id="sizeInput" class="party" min="1" step="1" value="1" required>
+            <p id="partyMessage"></p>
+        </section>
+
+        <section class="panel">
+            <h2>Add Loot</h2>
+
+            <label for="lootName">Loot Name:</label>
+            <input type="text" id="lootName" required>
+            
+            <label for="lootValue">Loot Value:</label>
+            <input type="number" id="lootValue" min="0" step="0.01" required>
+
+            <label for="lootQuantity">Quantity:</label>
+            <input type="number" id="lootQuantity" min="1" step="1" value="1" required>
+
+            <button id="lootBtn">Add Loot</button>
+            <p id="lootMessage"></p>
+        </section>
+
+        <section class="panel">
+            <h2>Loot List</h2>
+            <div id="noLootMessage">No loot added.</div>
+
+            <div class="loot-table">
+                <div class="loot-header">Name</div>
+                <div class="loot-header">Value</div>
+                <div class="loot-header">Quantity</div>
+                <div class="loot-header">Remove</div>
+
+                <div id="lootRows"></div>
+            </div>
+
+            <p id="listTotalRow" class="total-row hidden">Total Loot: <span id="listTotalValue">$0.00</span></p>
+        </section>
+
+        <section class="panel">
+            <h2>Split Loot</h2>
+            <button id="splitBtn" disabled>Split Loot</button>
+            <div id="splitResults" class="results hidden">
+                <p>Total Loot <span id="splitTotalValue">$0.00</span></p>
+                <p>Loot Per Party Member <span id="perPersonValue">$0.00</span></p>
+            </div>
+            <div class="server-actions" aria-label="Server synchronization controls">
+                <button id="syncBtn" class="secondary-button">Sync to Server</button>
+                <button id="loadServerBtn" class="secondary-button">Load from Server</button>
+            </div>
+            <p id="serverMessage" class="server-message" aria-live="polite"></p>
+            <button id="resetBtn" class="reset-button">Reset All</button>
+        </section>
+
+        <section class="panel reflection">
+            <h2>Logic Explanation</h2>
+            <p>
+                Lifecycle when adding loot then syncing:
+                When a user adds an item, addLoot() checks the input first, then adds the item object to lootItems.
+                After that it calls saveState() to save the data in localStorage, then updateUI() to show the changes on the page.
+                When the user clicks Sync to Server, syncToServer() calls getStateObject() to read lootItems and partySize
+                and send them to the server. The fetch POST happens in the background. If the server call works,
+                the app only shows a message with setServerMessage().
+                It does not change lootItems or call updateUI() again.
+                This order is important: one step changes data, another step saves it, and the last step shows it.
+                If we mix them, the page can show old data or localStorage can save wrong data.
+            </p>
+            <p>
+                Why sync does not replace local persistence:
+                saveState() saves to localStorage on every change, so the app still has data after a refresh.
+                The server in syncToServer() is only for sharing or backup.
+                It does not load data automatically when the page opens because loadFromServer() only runs
+                when the user clicks the button.
+                If the server is not available, the app still works from localStorage.
+                localStorage is the fast local copy and the server is the shared external copy.
+            </p>
+            <p>
+                Validation during external load:
+                loadFromServer() checks the server response with validateServerState() before it changes any data.
+                That check makes sure state.loot is a list, state.partySize is a valid whole number and each item passes validateLootItem().
+                If any item fails the function returns null and does not change lootItems or partySize.
+                This stops bad or harmful server data from replacing good state or making the app break halfway.
+            </p>
+            <p>
+                Debugging moment — console.log before assignment:
+                During development I added console.log('server data before assign:', data) inside the .then() block of loadFromServer(),
+                before calling validateServerState(data.state).
+                This showed that the first test response had status: "empty" even though I had synced.
+                The reason was a wrong studentId in the route.
+                The log showed the server data clearly and proved the code order was right.
+                Fixing STUDENT_ID to match the route and payload solved it.
+            </p>
+            <p>
+                A bug encountered and how lifecycle discipline fixed it:
+                At first loadFromServer() called updateUI() before saveState().
+                The page showed the new loot but if the user refreshed, localStorage still had the old data
+                and the app returned to the old state.
+                The fix was to use this order: Fetch → Validate → Assign → Save → updateUI().
+                Now saveState() runs before updateUI() so localStorage and the page stay in sync.
+                This rule made the bug easy to find: updateUI() ran before the data was saved.
+            </p>
+        </section>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #f1efed;
+    color: #1f2522;
+}
+
+main {
+    background-color: #ebe6e1;
+    width: min(1100px, 94%);
+    margin: 0 auto;
+    padding: 10px;
+    padding-bottom: 30px;
+}
+
+h1,h2 {
+    margin-top: 0;
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+h2 {
+    color: #26352f;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+input,select,button {
+    padding: 7px;
+    border: 1px solid #8b9990;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+
+input,select {
+    width: 100%;
+    max-width: 320px;
+    background-color: #ffffff;
+}
+
+button {
+    margin-top: 12px;
+    background-color: #5d512f;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #483925;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+button:disabled:hover {
+    background-color: #5d512f;
+}
+
+.reset-button {
+    background-color: #ffffff;
+    color: #7b2f2f;
+    border: 1px solid #7b2f2f;
+}
+
+.reset-button:hover {
+    background-color: #f5e7e4;
+}
+
+.secondary-button {
+    background-color: #ffffff;
+    color: #5d512f;
+    border: 1px solid #5d512f;
+}
+
+.secondary-button:hover {
+    background-color: #f1efed;
+}
+
+.header {
+    margin-bottom: 16px;
+    padding: 22px;
+    text-align: center;
+    background-color: #e7d6cf;
+}
+
+.panel {
+    margin-bottom: 16px;
+    padding: 18px;
+    background-color: #ffffff;
+    border: 1px solid #ccd4cf;
+    border-radius: 6px;
+    box-shadow: 2px 2px 4px rgba(31, 37, 34, 0.336);
+}
+
+.hidden {
+    display: none;
+}
+
+#noLootMessage {
+    margin-bottom: 0.8rem;
+}
+
+#partyMessage,#lootMessage {
+    min-height: 1.2rem;
+    color: #7b2f2f;
+}
+
+.server-actions {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.server-message {
+    min-height: 1.2rem;
+    color: #2f5d50;
+}
+
+.server-message.error {
+    color: #7b2f2f;
+}
+
+.loot-table {
+    display: grid;
+    grid-template-columns: minmax(0, 2.5fr) minmax(4.5rem, 1fr) minmax(4.5rem, 1fr) minmax(5rem, 1fr);
+    column-gap: 0.5rem;
+    row-gap: 0.8rem;
+    align-items: center;
+}
+
+#lootRows,.loot-row {
+    display: contents;
+}
+
+.loot-header {
+    font-weight: bold;
+    border-bottom: 2px solid #ccd4cf;
+    padding-bottom: 0.35rem;
+}
+
+.loot-cell {
+    min-width: 0;
+    padding: 0.15rem 0;
+    overflow-wrap: anywhere;
+}
+
+.loot-actions {
+    display: flex;
+}
+
+.loot-remove {
+    width: 100%;
+    margin-top: 0;
+}
+
+.total-row {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.results {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 1rem;
+}
+
+.results p {
+    margin: 0;
+}
+
+#listTotalValue,#splitTotalValue,#perPersonValue {
+    font-weight: bold;
+    color: #2f5d50;
+}
+
+@media (min-width: 768px) {
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+    }
+
+    .server-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.header {
+    grid-column: span 2;
+}
+
+.reflection {
+    grid-column: span 2;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+}
