@@ -110,7 +110,7 @@
                 At first loadFromServer() called updateUI() before saveState().
                 The page showed the new loot but if the user refreshed, localStorage still had the old data
                 and the app returned to the old state.
-                The fix was to use this order: Fetch → Validate → Assign → Save → updateUI().
+                The fix was to use this order: Fetch, Validate, Assign, Save, updateUI().
                 Now saveState() runs before updateUI() so localStorage and the page stay in sync.
                 This rule made the bug easy to find: updateUI() ran before the data was saved.
             </p>
